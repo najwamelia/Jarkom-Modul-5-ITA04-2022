@@ -228,3 +228,63 @@ options {
 " > /etc/bind/named.conf.options
 service bind9 restart
 ```
+
+### Soal 1
+Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Strix menggunakan iptables, tetapi Loid tidak ingin menggunakan MASQUERADE.
+
+#### Jawab
+Melakukan konfigurasi pada Strix seperti berikut:
+```
+ipEth0="$(ip -br a | grep eth0 | awk '{print $NF}' | cut -d'/' -f1)"
+
+iptables -t nat -A POSTROUTING -s 192.212.0.0/21 -o eth0 -j SNAT --to-source "$ipEth0"
+```
+
+#### Testing
+Mencoba ping dari salah satu node
+![Foto](./img/no1.png)
+
+### Soal 2
+Kalian diminta untuk melakukan drop semua TCP dan UDP dari luar Topologi kalian pada server yang merupakan DHCP Server demi menjaga keamanan.
+
+#### Jawab
+Menjalankan command pada Strix seperti berikut agar semua paket TCP yang menuju 192.212.7.136/29 dan melalui eth0 menuju port 80 akan di drop:
+```
+iptables -A FORWARD -d 192.212.7.136/29 -i eth0 -p tcp --dport 80 -j DROP
+```
+
+### Soal 3
+Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop.
+
+#### Jawab
+Menjalankan command berikut pada DHCP Server Wise:
+```
+iptables -A INPUT -p ICMP -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
+```
+
+Selanjutnya menjalankan command berikut untuk DNS Server Doriki:
+```
+iptables -A INPUT -p ICMP -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
+```
+
+#### Testing
+Mencoba ping dari Forger dan Desmond
+![Foto](./img/no3a.png)
+![Foto](./img/no3b.png)
+
+Pada node Blackbell sudah tidak dapat melakukan ping menuju 192.212.7.138 lagi
+![Foto](./img/no3c.png)
+
+### Soal 4
+Akses menuju Web Server hanya diperbolehkan disaat jam kerja yaitu Senin sampai Jumat pada pukul 07.00 - 16.00.
+
+#### Jawab
+Menjalankan command berikut pada Eden
+```
+iptables -A INPUT -s 192.212.7.136/29 -m time --timestart 07:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
+iptables -A INPUT -s 192.212.7.136/29 -j REJECT
+```
+
+#### Testing
+Mencoba ping pada IP yang telah diatur/dibatasi (atas) dan mencoba ping pada IP yang lain (bawah)
+![Foto](./img/no4.jpeg)
