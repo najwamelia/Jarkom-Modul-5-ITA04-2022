@@ -25,7 +25,7 @@ Subnet A1 :
     IP range : 192.212.7.129 - 192.212.7.134
 ```
 Sehingga untuk konfigurasi setiap nodenya adalah seperti berikut:
-I##### Strix
+##### Strix
 ```
 auto eth0
 iface eth0 inet dhcp
