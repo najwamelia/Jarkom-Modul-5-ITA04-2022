@@ -259,7 +259,7 @@ Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima mak
 #### Jawab
 Menjalankan command berikut pada DHCP Server Wise:
 ```
-iptables -A INPUT -p ICMP -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
+iptables -A INPUT -p ICMP -m connlimit --connlimit-above 2 --connlimit-mask 0 -j DROP
 ```
 
 Selanjutnya menjalankan command berikut untuk DNS Server Doriki:
@@ -286,5 +286,5 @@ iptables -A INPUT -s 192.212.7.136/29 -j REJECT
 ```
 
 #### Testing
-Mencoba ping pada IP yang telah diatur/dibatasi (atas) dan mencoba ping pada IP yang lain (bawah)
+Mencoba ping pada IP yang telah diatur (atas) sudah tidak terkirim karena dibatasi dan mencoba ping pada IP yang lain (bawah)
 ![Foto](./img/no4.jpeg)
