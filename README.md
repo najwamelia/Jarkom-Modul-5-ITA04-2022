@@ -5,7 +5,7 @@ Nida'ul Faizah | 5027201064
 Kevin Oktoaria | 5027201046
 Najwa Amelia Qorry 'Aina | 5027201001
 
-## Soal
+
 ### Soal A
 Membuat topologi jaringan sesuai rancangan Loid pada GNS3, beserta pembagian subnetnya sebagai berikut:
 
